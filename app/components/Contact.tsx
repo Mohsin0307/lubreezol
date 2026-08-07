@@ -5,8 +5,7 @@ import { motion, type Variants } from 'framer-motion';
 import { Loader2, Mail, MapPin, Phone, Send, type LucideIcon } from 'lucide-react';
 
 /**
- * Contact details — placeholders below, update with the real business
- * phone/email/address before deploying.
+ * Contact details — sourced from the company's official business card.
  */
 interface ContactDetail {
   icon: LucideIcon;
@@ -16,9 +15,24 @@ interface ContactDetail {
 }
 
 const CONTACT_DETAILS: ContactDetail[] = [
-  { icon: Phone, label: 'Call Us', value: '+92 300 0000000', href: 'tel:+923000000000' },
-  { icon: Mail, label: 'Email Us', value: 'info@lubrezool.com', href: 'mailto:info@lubrezool.com' },
-  { icon: MapPin, label: 'Visit Us', value: 'Karachi, Sindh, Pakistan', href: 'https://maps.google.com' },
+  {
+    icon: Phone,
+    label: 'Call Us',
+    value: '0321-2550469',
+    href: 'tel:+923212550469',
+  },
+  {
+    icon: Mail,
+    label: 'Email Us',
+    value: 'Lubreezollubricants@gmail.com',
+    href: 'mailto:Lubreezollubricants@gmail.com',
+  },
+  {
+    icon: MapPin,
+    label: 'Visit Us',
+    value: 'Office No. 425-426, SP Chamber, Plot No. 89/C9, Estate Avenue, SITE, Karachi',
+    href: 'https://maps.google.com/?q=Estate+Avenue+SITE+Karachi',
+  },
 ];
 
 interface ContactFormState {
@@ -113,6 +127,8 @@ export default function Contact() {
                     <li key={detail.label}>
                       <a
                         href={detail.href}
+                        target={detail.label === 'Visit Us' ? '_blank' : undefined}
+                        rel={detail.label === 'Visit Us' ? 'noopener noreferrer' : undefined}
                         className="flex items-start gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                       >
                         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/10">
@@ -122,13 +138,20 @@ export default function Contact() {
                           <span className="block text-xs uppercase tracking-[0.15em] text-white/60">
                             {detail.label}
                           </span>
-                          <span className="text-sm font-medium text-white">{detail.value}</span>
+                          <span className="text-sm font-medium leading-relaxed text-white">
+                            {detail.value}
+                          </span>
                         </span>
                       </a>
                     </li>
                   );
                 })}
               </ul>
+            </div>
+
+            <div className="mt-8 border-t border-white/15 pt-5">
+              <p className="text-xs uppercase tracking-[0.15em] text-white/60">Chief Executive Officer</p>
+              <p className="mt-1 text-sm font-medium text-white">Imran Ahmed</p>
             </div>
           </motion.div>
 

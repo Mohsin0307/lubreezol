@@ -1,3 +1,4 @@
+import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import "./globals.css";
 import { Archivo_Black, Barlow, JetBrains_Mono } from 'next/font/google';
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-body">
         <Navbar />
         {children}
+        <Footer />
         </body>
     </html>
   );
