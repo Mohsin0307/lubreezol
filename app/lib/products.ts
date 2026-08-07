@@ -62,6 +62,10 @@ export interface ProductSpec {
     { slug: 'product-7', image: '/7.jpeg', name: 'Lubrezol HD 50', category: 'Lubricant', description: 'Add product description here.' },
     { slug: 'product-8', image: '/8.jpeg', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
     { slug: 'product-9', image: '/9.jpeg', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-10', image: '/10.jpeg', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-11', image: '/11.jpeg', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-12', image: '/12.jpeg', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-13', image: '/13.jpeg', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
   ];
   
   export function getProductBySlug(slug: string): Product | undefined {
