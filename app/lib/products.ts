@@ -29,7 +29,7 @@ export interface ProductSpec {
   export const PRODUCTS: Product[] = [
     {
       slug: 'truck-plus-ci4-sl-15w40',
-      image: '/1.jpeg',
+      image: '/1.png',
       name: 'Truck Plus API CI-4/SL 15W40',
       category: 'Diesel Engine Oil',
       description:
@@ -54,18 +54,18 @@ export interface ProductSpec {
         { parameter: 'CCS Viscosity @ -30°C', unit: 'mPa·s', method: 'ASTM D 5293', value: '6500' },
       ],
     },
-    { slug: 'product-2', image: '/2.jpeg', name: 'Lubrezol SAE 50', category: 'Lubricant', description: 'Add product description here.' },
-    { slug: 'product-3', image: '/3.jpeg', name: 'Lubrezol Hydraulic Oil ISO VG 68', category: 'Lubricant', description: 'Add product description here.' },
-    { slug: 'product-4', image: '/4.jpeg', name: 'Lubrezol Power 100', category: 'Lubricant', description: 'Add product description here.' },
-    { slug: 'product-5', image: '/5.jpeg', name: 'Lubrezol Immemce Power Semi-Synthetic', category: 'Lubricant', description: 'Add product description here.' },
-    { slug: 'product-6', image: '/6.jpeg', name: 'Lubrezol Immence Power 4T Motor Cyle Oil ', category: 'Lubricant', description: 'Add product description here.' },
-    { slug: 'product-7', image: '/7.jpeg', name: 'Lubrezol HD 50', category: 'Lubricant', description: 'Add product description here.' },
-    { slug: 'product-8', image: '/8.jpeg', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
-    { slug: 'product-9', image: '/9.jpeg', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
-    { slug: 'product-10', image: '/10.jpeg', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
-    { slug: 'product-11', image: '/11.jpeg', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
-    { slug: 'product-12', image: '/12.jpeg', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
-    { slug: 'product-13', image: '/13.jpeg', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-2', image: '/2.png', name: 'Lubrezol SAE 50', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-3', image: '/3.png', name: 'Lubrezol Hydraulic Oil ISO VG 68', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-4', image: '/4.png', name: 'Lubrezol Power 100', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-5', image: '/5.png', name: 'Lubrezol Immemce Power Semi-Synthetic', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-6', image: '/6.png', name: 'Lubrezol Immence Power 4T Motor Cyle Oil ', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-7', image: '/7.png', name: 'Lubrezol HD 50', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-8', image: '/8.png', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-9', image: '/9.png', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-10', image: '/10.png', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-11', image: '/11.png', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-12', image: '/12.png', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-13', image: '/13.png', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },
   ];
   
   export function getProductBySlug(slug: string): Product | undefined {

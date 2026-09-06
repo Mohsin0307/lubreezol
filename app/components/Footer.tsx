@@ -19,7 +19,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2.5">
               <Image
-                src="/logo.jpeg"
+                src="/logo.png"
                 alt="Lubreezol Lubricants & Chemicals"
                 width={36}
                 height={46}

@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${archivoBlack.variable} ${barlow.variable} ${jetbrainsMono.variable}`}>
       <body className="font-body">
-        <Navbar />
+        <Navbar logoSrc="/logo.png" tagline="Lubricants. Technology. People." />
         {children}
         <Footer />
         </body>
