@@ -26,7 +26,7 @@ import { ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
 const SLIDES = [
   {
     image:
-      "https://images.pexels.com/photos/27358360/pexels-photo-27358360.jpeg?auto=compress&cs=tinysrgb&w=1920",
+      "sl1.png",
     heading: "Lubricants. Engineered for industry.",
     body: "Lubreezol formulates high-performance lubricants for automotive, industrial, and marine applications — built to reduce wear and extend the life of the equipment that depends on them.",
     cta: "Explore products",
