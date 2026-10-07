@@ -84,7 +84,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="relative bg-white py-24 sm:py-32">
+    <section id="contact" className="relative bg-white bg-[#F5F5F5] py-24 sm:py-32">
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -104,14 +104,14 @@ export default function Contact() {
           className="max-w-2xl font-display text-4xl leading-[1.1] tracking-tight text-brand-ink sm:text-5xl"
         >
           Let&apos;s talk about
-          <span className="text-brand-navy"> your lubrication needs.</span>
+          <span className="text-[#0A2E63]"> your lubrication needs.</span>
         </motion.h2>
 
         <div className="mt-16 grid grid-cols-1 gap-10 lg:grid-cols-5 lg:gap-8">
           {/* Contact details panel */}
           <motion.div
             variants={itemVariants}
-            className="flex flex-col justify-between rounded-3xl bg-brand-navy p-8 text-white lg:col-span-2"
+            className="flex flex-col justify-between rounded-3xl bg-[#0A2E63] p-8 text-white lg:col-span-2"
           >
             <div>
               <h3 className="font-display text-2xl tracking-tight">Contact Details</h3>
