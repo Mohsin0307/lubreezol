@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, FileDown } from 'lucide-react';
 
 import { PRODUCTS, getProductBySlug } from '../../lib/products';
 
@@ -79,12 +79,27 @@ export default function ProductPage({ params }: ProductPageProps) {
               </ul>
             )}
 
-            <Link
-              href="/#contact"
-              className="mt-10 inline-flex items-center justify-center rounded-md bg-brand-gold px-6 py-3.5 font-semibold text-brand-ink shadow-brand-gold transition-transform duration-200 hover:-translate-y-0.5"
-            >
-              Request a Quote
-            </Link>
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <Link
+                href="/#contact"
+                className="inline-flex items-center justify-center rounded-md bg-brand-gold px-6 py-3.5 font-semibold text-brand-ink shadow-brand-gold transition-transform duration-200 hover:-translate-y-0.5"
+              >
+                Request a Quote
+              </Link>
+
+              {/* PDS download — same PDF as the grid card. */}
+              {product.pdf && (
+                <a
+                  href={product.pdf}
+                  download
+                  aria-label={`Download PDS (PDF) for ${product.name}`}
+                  className="inline-flex items-center gap-2 rounded-md border border-brand-navy/25 px-6 py-3.5 font-semibold text-brand-navy transition-colors duration-200 hover:border-brand-navy hover:bg-brand-navy/5"
+                >
+                  <FileDown className="h-4 w-4" />
+                  Download PDS (PDF)
+                </a>
+              )}
+            </div>
           </div>
         </div>
 

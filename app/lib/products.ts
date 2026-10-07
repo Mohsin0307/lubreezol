@@ -24,6 +24,9 @@ export interface ProductSpec {
     applications?: string;
     features?: string[];
     specs?: ProductSpec[];
+    /** Optional Product Data Sheet served from /public/pdf — a "PDS" download
+     *  button renders on the grid card and detail page only when present. */
+    pdf?: string;
   }
   
   export const PRODUCTS: Product[] = [
@@ -55,9 +58,9 @@ export interface ProductSpec {
       ],
     },
     { slug: 'product-2', image: '/2.png', name: 'Lubrezol SAE 50', category: 'Lubricant', description: 'Add product description here.' },
-    { slug: 'product-3', image: '/3.png', name: 'Lubrezol Hydraulic Oil ISO VG 68', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-3', image: '/3.png', name: 'Lubrezol Hydraulic Oil ISO VG 68', category: 'Lubricant', description: 'Add product description here.', pdf: '/pdf/pds-lubrezol-hydraulic-oil.pdf' },
     { slug: 'product-4', image: '/4.png', name: 'Lubrezol Power 100', category: 'Lubricant', description: 'Add product description here.' },
-    { slug: 'product-5', image: '/5.png', name: 'Lubrezol Immemce Power Semi-Synthetic', category: 'Lubricant', description: 'Add product description here.' },
+    { slug: 'product-5', image: '/5.png', name: 'Lubrezol Immemce Power Semi-Synthetic', category: 'Lubricant', description: 'Add product description here.', pdf: '/pdf/pds-lubrezol-immense-power-5w30.pdf' },
     { slug: 'product-6', image: '/6.png', name: 'Lubrezol Immence Power 4T Motor Cyle Oil ', category: 'Lubricant', description: 'Add product description here.' },
     { slug: 'product-7', image: '/7.png', name: 'Lubrezol HD 50', category: 'Lubricant', description: 'Add product description here.' },
     { slug: 'product-8', image: '/8.png', name: 'Lubrezol Super Formula', category: 'Lubricant', description: 'Add product description here.' },

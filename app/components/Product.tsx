@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, type Variants } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, FileDown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -59,10 +59,10 @@ export default function Products() {
         <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {PRODUCTS.map((product) => (
             <motion.div key={product.slug} variants={itemVariants}>
-              <Link
-                href={`/products/${product.slug}`}
-                className="group block overflow-hidden rounded-2xl border border-brand-ink/10 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-navy"
-              >
+              {/* Card is a relative container; the "View Details" link stretches
+                  (via its after: pseudo-element) to cover the whole card, while
+                  the PDS download link sits above it (z-10) and stays clickable. */}
+              <div className="group relative block overflow-hidden rounded-2xl border border-brand-ink/10 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-card focus-within:outline-none focus-within:ring-2 focus-within:ring-brand-navy">
                 {/* Image */}
                 <div className="relative aspect-square overflow-hidden bg-white p-6">
                   <Image
@@ -85,12 +85,31 @@ export default function Products() {
                   <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-brand-muted">
                     {product.description}
                   </p>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-navy">
-                    View Details
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1" />
-                  </span>
+
+                  <div className="mt-4 flex items-center justify-between gap-3">
+                    <Link
+                      href={`/products/${product.slug}`}
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-navy after:absolute after:inset-0 after:content-['']"
+                    >
+                      View Details
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1" />
+                    </Link>
+
+                    {/* Direct PDS download — no detail-page visit needed. */}
+                    {product.pdf && (
+                      <a
+                        href={product.pdf}
+                        download
+                        aria-label={`Download PDS (PDF) for ${product.name}`}
+                        className="relative z-10 inline-flex items-center gap-1.5 rounded-md border border-brand-navy/25 px-3 py-1.5 text-sm font-semibold text-brand-navy transition-colors duration-200 hover:border-brand-navy hover:bg-brand-navy/5"
+                      >
+                        <FileDown className="h-4 w-4" />
+                        PDS
+                      </a>
+                    )}
+                  </div>
                 </div>
-              </Link>
+              </div>
             </motion.div>
           ))}
         </div>
