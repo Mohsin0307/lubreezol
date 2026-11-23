@@ -9,7 +9,7 @@ const NAV_LINKS = [
   { label: 'Contact', href: '#contact' },
 ];
 
-export default function Footer() {
+export default function Footer({ logoSrc = '/logo.png' }: { logoSrc?: string }) {
   const year = new Date().getFullYear();
 
   return (
@@ -28,7 +28,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2.5">
               <Image
-                src="/logo.png"
+                src={logoSrc}
                 alt="Lubreezol Lubricants & Chemicals"
                 width={36}
                 height={46}

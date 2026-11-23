@@ -1,153 +1,216 @@
 "use client";
 
-import { useState } from "react";
-import { ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ArrowRight, ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
+
+import type { HeroSlide } from "../lib/fallbackContent";
 
 /**
- * LubreezolHero
- * Drop-in hero section for a Next.js page (works as a Client Component).
+ * LubreezolHero — bright full-width slider
  *
- * Usage in app router:
- *   "use client";
- *   import LubreezolHero from "@/components/LubreezolHero";
- *   export default function Page() { return <LubreezolHero />; }
+ * Image fit (no more over-zoom):
+ *  - Desktop height = min(100svh, 56.25vw) → hero never gets taller than a
+ *    16:9 frame, so a 16:9 photo is barely cropped on any screen.
+ *  - Mobile: photo sits on top in a 16:10 frame, text card below it
+ *    (photo is no longer hidden behind the card).
+ *  - Each slide has its own `position` (focal point) — tweak it if the
+ *    important part of a photo gets cut (e.g. "left center", "70% 50%").
  *
- * Requires Tailwind CSS (default in most Next.js setups) and lucide-react:
- *   npm install lucide-react
- *
- * Fonts: loads "Space Grotesk" (display) + "Inter" (body) from Google Fonts
- * inline for portability. If you already load fonts in your root layout,
- * remove the <style> block below and just reference the font-family classes.
+ * Photos: bright landscape 16:9 images in /public — sl1.png, sl2.png, sl3.png
+ * (1920x1080 or larger).
  */
 
-// Free-to-use stock photos (Pexels license — free for commercial & personal
-// use, no attribution required). Swap these for your own product/plant
-// photography whenever it's ready.
-const SLIDES = [
-  {
-    image:
-      "sl1.png",
-    heading: "Lubricants. Engineered for industry.",
-    body: "Lubreezol formulates high-performance lubricants for automotive, industrial, and marine applications — built to reduce wear and extend the life of the equipment that depends on them.",
-    cta: "Explore products",
-  },
-  {
-    image:
-      "https://images.pexels.com/photos/28080033/pexels-photo-28080033.jpeg?auto=compress&cs=tinysrgb&w=1920",
-    heading: "One partner, every application.",
-    body: "From engine oils to industrial greases, our range covers the full spectrum of lubrication needs across manufacturing, transport, and heavy machinery.",
-    cta: "See industries",
-  },
-  {
-    image:
-      "https://images.pexels.com/photos/11377370/pexels-photo-11377370.jpeg?auto=compress&cs=tinysrgb&w=1920",
-    heading: "Formulated. Tested. Trusted.",
-    body: "Every product leaves our lab having passed rigorous performance testing, so your machinery runs longer with fewer stops.",
-    cta: "Our quality standards",
-  },
+const AUTOPLAY_MS = 6000;
+
+// "contain" = poori photo dikhti hai, kuch cut nahi hota (blurred fill side mein)
+// "cover"   = poori screen bharti hai, lekin edges cut ho sakte hain
+const IMAGE_FIT = "contain";
+
+
+const INDUSTRIES = [
+  "Automotive",
+  "Industrial Manufacturing",
+  "Construction",
+  "Agriculture",
+  "Transportation",
+  "Marine",
+  "Power Generation",
 ];
 
-export default function LubreezolHero() {
+export default function LubreezolHero({ slides }: { slides: HeroSlide[] }) {
   const [active, setActive] = useState(0);
+  const reduceMotion = useReducedMotion();
 
-  const next = () => setActive((i) => (i + 1) % SLIDES.length);
-  const prev = () => setActive((i) => (i - 1 + SLIDES.length) % SLIDES.length);
-  const slide = SLIDES[active];
+  const next = () => setActive((i) => (i + 1) % slides.length);
+  const prev = () => setActive((i) => (i - 1 + slides.length) % slides.length);
+
+  // Autoplay — timer restarts on every slide change (manual or auto)
+  useEffect(() => {
+    const id = setTimeout(next, AUTOPLAY_MS);
+    return () => clearTimeout(id);
+  }, [active]);
+
+  const slide = slides[active];
 
   return (
-    <div className="lz-hero-root -mt-[72px]">
-      {/* dangerouslySetInnerHTML avoids a server/client hydration mismatch on the & in the fonts URL */}
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
-        .lz-hero-root { font-family: 'Inter', sans-serif; }
-        .lz-display { font-family: 'Space Grotesk', sans-serif; }`,
-        }}
-      />
-
-      <div className="relative w-full overflow-hidden bg-[#0B1B2B]">
-        {/* Hero body — the sticky translucent navbar overlays this photo */}
-        <div className="relative min-h-[560px] md:min-h-[620px] flex items-center">
-          {/* Background photo (swaps per slide) */}
-          <div className="absolute inset-0">
-            {SLIDES.map((s, i) => (
-              <img
-                key={i}
+    <section
+      id="home"
+      className="relative w-full overflow-hidden bg-brand-bg pt-16 md:h-[min(100svh,56.25vw)] md:min-h-[640px] md:pt-0"
+    >
+      {/* Photo frame: 16:9 on mobile, full-bleed on desktop */}
+      <div className="relative aspect-video w-full md:absolute md:inset-0 md:aspect-auto">
+        {slides.map((s, i) => (
+          <div
+            key={s.image}
+            aria-hidden={i !== active}
+            className={`absolute inset-0 transition-opacity duration-700 ${
+              i === active ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            {/* Soft blurred copy fills any empty side space */}
+            {IMAGE_FIT === "contain" && (
+              <Image
                 src={s.image}
                 alt=""
-                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-600 ${
-                  i === active ? "opacity-100" : "opacity-0"
-                }`}
+                fill
+                quality={40}
+                sizes="25vw"
+                className="scale-110 object-cover blur-2xl"
               />
-            ))}
-            {/* Darken + tint the photo so text stays legible and the palette stays on-brand */}
-            <div className="absolute inset-0 bg-[#0B1B2B]/70" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0B1B2B] via-[#0B1B2B]/30 to-transparent" />
-            <div className="absolute -right-24 top-1/4 h-[520px] w-[520px] rounded-full bg-[#C79A3C] opacity-20 blur-[120px]" />
+            )}
+            {/* Main photo — "contain" shows the whole picture, nothing cut */}
+            <Image
+              src={s.image}
+              alt=""
+              fill
+              priority={i === 0}
+              quality={85}
+              sizes="100vw"
+              style={{ objectPosition: s.position }}
+              className={IMAGE_FIT === "contain" ? "object-contain" : "object-cover"}
+            />
           </div>
+        ))}
 
-          {/* Overlay content panel */}
-          <div className="relative z-20 w-full px-6 md:px-10">
-            <div className="max-w-xl bg-[#123A5E]/90 backdrop-blur-sm px-7 py-8 md:px-10 md:py-10">
-              <h1 className="lz-display text-white text-3xl md:text-4xl font-semibold leading-tight mb-4">
-                {slide.heading}
-              </h1>
-              <p className="text-white/85 text-sm md:text-base leading-relaxed mb-6 max-w-md">
-                {slide.body}
-              </p>
-              <a
-                href="#"
-                className="inline-flex items-center gap-2 text-white text-sm font-semibold border-b-2 border-[#C79A3C] pb-1 hover:gap-3 transition-all"
-              >
-                {slide.cta}
-              </a>
-            </div>
-          </div>
-
-          {/* Vertical side tab */}
-          <button
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-[#123A5E] text-white text-xs font-medium tracking-wide px-2 py-4 hidden md:flex items-center"
-            style={{ writingMode: "vertical-rl" }}
-          >
-            Contact us
-          </button>
-
-          {/* Floating help icon */}
-          <button className="absolute bottom-6 right-6 z-20 h-11 w-11 rounded-full bg-white text-[#0B1B2B] flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
-            <MessageCircle size={18} />
-          </button>
-
-          {/* Carousel controls */}
+        {/* Slide controls */}
+        <div className="absolute bottom-4 right-4 z-20 flex items-center gap-2 md:bottom-24 md:right-10 md:gap-3">
+          <span className="hidden rounded-full bg-white/90 px-3 py-1.5 font-mono text-xs text-brand-navy shadow-card sm:inline-block">
+            {String(active + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
+          </span>
           <button
             onClick={prev}
             aria-label="Previous slide"
-            className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full border border-white/30 text-white/80 flex items-center justify-center hover:bg-white/10 transition-colors"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-navy shadow-card transition-colors hover:bg-brand-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-navy md:h-10 md:w-10"
           >
             <ChevronLeft size={18} />
           </button>
           <button
             onClick={next}
             aria-label="Next slide"
-            className="absolute right-16 md:right-20 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full border border-white/30 text-white/80 flex items-center justify-center hover:bg-white/10 transition-colors"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-navy shadow-card transition-colors hover:bg-brand-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-navy md:h-10 md:w-10"
           >
             <ChevronRight size={18} />
           </button>
+        </div>
+      </div>
 
-          {/* Dots */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
-            {SLIDES.map((_, i) => (
+      {/* Text card: overlaps photo on mobile, floats left on desktop */}
+      <div className="relative z-10 mx-auto max-w-container px-4 md:flex md:h-full md:items-center md:px-6 md:pb-20 md:pt-24">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active}
+            initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -10 }}
+            transition={{ duration: reduceMotion ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
+            className="relative -mt-8 max-w-[34rem] overflow-hidden rounded-2xl border border-white/70 bg-white/95 p-6 shadow-[0_24px_60px_-20px_rgba(28,28,28,0.3)] backdrop-blur-md md:mt-0 md:p-9"
+          >
+            <span className="absolute inset-x-0 top-0 h-1 bg-brand-gold" aria-hidden />
+
+            <p className="mb-4 flex items-center gap-3 text-sm font-semibold text-brand-navy">
+              <span className="h-px w-8 bg-brand-gold" aria-hidden />
+              {slide.eyebrow}
+            </p>
+
+            <h1 className="font-display text-3xl leading-[1.1] tracking-tight text-brand-ink [text-wrap:balance] md:text-[2.75rem]">
+              {slide.heading}
+            </h1>
+
+            <p className="mt-4 text-[15px] leading-relaxed text-brand-muted md:text-base">
+              {slide.body}
+            </p>
+
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <a
+                href={slide.href}
+                className="group inline-flex items-center gap-2 rounded-md bg-brand-gold px-6 py-3.5 font-semibold text-brand-ink shadow-brand-gold transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-navy"
+              >
+                {slide.cta}
+                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+              </a>
+              <a
+                href="#contact"
+                className="inline-flex items-center rounded-md border border-brand-navy/25 px-6 py-3.5 font-semibold text-brand-navy transition-colors duration-200 hover:border-brand-navy hover:bg-brand-navy/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-navy"
+              >
+                Contact us
+              </a>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Bottom strip: progress bars + industries */}
+      <div className="relative z-20 mt-6 border-t border-brand-ink/5 bg-white md:absolute md:inset-x-0 md:bottom-0 md:mt-0 md:bg-white/95 md:backdrop-blur-md">
+        <div className="mx-auto flex max-w-container flex-col gap-3 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6">
+          <div className="flex items-center gap-2" role="tablist" aria-label="Slides">
+            {slides.map((_, i) => (
               <button
                 key={i}
+                role="tab"
+                aria-selected={i === active}
                 onClick={() => setActive(i)}
                 aria-label={`Go to slide ${i + 1}`}
-                className={`h-2 rounded-full transition-all ${
-                  i === active ? "w-6 bg-[#C79A3C]" : "w-2 bg-white/40 hover:bg-white/60"
-                }`}
-              />
+                className="relative h-1.5 w-14 overflow-hidden rounded-full bg-brand-ink/10"
+              >
+                {i === active && (
+                  <motion.span
+                    key={active}
+                    className="absolute inset-y-0 left-0 bg-brand-navy"
+                    initial={{ width: "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: AUTOPLAY_MS / 1000, ease: "linear" }}
+                  />
+                )}
+                {i < active && <span className="absolute inset-0 bg-brand-navy" />}
+              </button>
             ))}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-brand-muted">
+            <span className="font-semibold text-brand-ink">Industries we serve</span>
+            <ul className="flex flex-wrap gap-x-4 gap-y-1">
+              {INDUSTRIES.map((industry) => (
+                <li key={industry} className="whitespace-nowrap">
+                  {industry}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* WhatsApp quick contact */}
+      <a
+        href="https://wa.me/923212550469"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Chat on WhatsApp"
+        className="fixed bottom-6 right-4 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-brand-navy text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold md:bottom-28 md:right-10"
+      >
+        <MessageCircle size={20} />
+      </a>
+    </section>
   );
 }

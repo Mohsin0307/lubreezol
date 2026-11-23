@@ -6,14 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "sanity exec sanity/seed.ts --with-user-token"
   },
   "dependencies": {
+    "@sanity/image-url": "^1.2.0",
+    "@sanity/vision": "^3.99.0",
     "framer-motion": "^12.43.0",
     "lucide-react": "^1.27.0",
     "next": "14.2.35",
+    "next-sanity": "^9.12.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "sanity": "^3.99.0",
+    "styled-components": "^6.6.0"
   },
   "devDependencies": {
     "@types/node": "^20",

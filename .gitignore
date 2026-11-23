@@ -36,3 +36,7 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+.env*
+
+# local dev server log
+devserver.log

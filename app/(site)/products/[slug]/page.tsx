@@ -4,7 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, CheckCircle2, FileDown } from 'lucide-react';
 
-import { PRODUCTS, getProductBySlug } from '../../lib/products';
+import { getProduct, getProducts } from '../../../lib/content';
+
+export const revalidate = 60;
 
 interface ProductPageProps {
   params: { slug: string };
@@ -14,12 +16,13 @@ interface ProductPageProps {
  * Pre-renders one static page per product at build time
  * (e.g. /products/truck-plus-ci4-sl-15w40) instead of generating on demand.
  */
-export function generateStaticParams() {
-  return PRODUCTS.map((product) => ({ slug: product.slug }));
+export async function generateStaticParams() {
+  const products = await getProducts();
+  return products.map((product) => ({ slug: product.slug }));
 }
 
-export function generateMetadata({ params }: ProductPageProps): Metadata {
-  const product = getProductBySlug(params.slug);
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const product = await getProduct(params.slug);
   if (!product) return {};
   return {
     title: `${product.name} | Lubrezool`,
@@ -27,8 +30,8 @@ export function generateMetadata({ params }: ProductPageProps): Metadata {
   };
 }
 
-export default function ProductPage({ params }: ProductPageProps) {
-  const product = getProductBySlug(params.slug);
+export default async function ProductPage({ params }: ProductPageProps) {
+  const product = await getProduct(params.slug);
 
   if (!product) {
     notFound();

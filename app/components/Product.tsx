@@ -5,7 +5,7 @@ import { ArrowRight, FileDown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { PRODUCTS } from '../lib/products';
+import type { Product } from '../lib/products';
 
 const containerVariants: Variants = {
   hidden: {},
@@ -17,7 +17,7 @@ const itemVariants: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
 };
 
-export default function Products() {
+export default function Products({ products }: { products: Product[] }) {
   return (
     <section id="products" className="relative bg-brand-bg py-24 sm:py-32">
       <motion.div
@@ -57,7 +57,7 @@ export default function Products() {
 
         {/* Product grid */}
         <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {PRODUCTS.map((product) => (
+          {products.map((product) => (
             <motion.div key={product.slug} variants={itemVariants}>
               {/* Card is a relative container; the "View Details" link stretches
                   (via its after: pseudo-element) to cover the whole card, while

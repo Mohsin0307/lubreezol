@@ -1,6 +1,4 @@
-import Footer from "./components/Footer";
-import Navbar from "./components/Navbar";
-import "./globals.css";
+import './globals.css';
 import { Archivo_Black, Barlow, JetBrains_Mono } from 'next/font/google';
 
 const archivoBlack = Archivo_Black({
@@ -21,14 +19,15 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-mono',
 });
 
+/**
+ * Root layout only owns <html>/<body> and the fonts, so the embedded Sanity
+ * Studio at /studio renders full-screen without the site navbar and footer.
+ * The public pages get the chrome from app/(site)/layout.tsx.
+ */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${archivoBlack.variable} ${barlow.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-body">
-        <Navbar logoSrc="/logo.png" tagline="Lubricants. Technology. People." />
-        {children}
-        <Footer />
-        </body>
+      <body className="font-body">{children}</body>
     </html>
   );
 }

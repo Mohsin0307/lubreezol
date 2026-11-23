@@ -2,66 +2,16 @@
 
 import Link from 'next/link';
 import { motion, type Variants } from 'framer-motion';
-import { Droplet, Wrench, Search, ChevronRight, Newspaper, type LucideIcon } from 'lucide-react';
+import { ChevronRight, Droplet, Newspaper, Search, Wrench, type LucideIcon } from 'lucide-react';
 
-interface QuickLink {
-  href: string;
-  image: string;
-  icon: LucideIcon;
-  title: string;
-  description: string;
-}
+import type { ContentIcon, NewsItem, QuickLink } from '../lib/fallbackContent';
 
-interface NewsItem {
-  image: string;
-  icon: LucideIcon;
-  category: string;
-  title: string;
-}
-
-const QUICK_LINKS: QuickLink[] = [
-  {
-    href: '/oil-finder',
-    image:
-      'https://images.pexels.com/photos/10490609/pexels-photo-10490609.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    icon: Droplet,
-    title: 'Lubrezool Oil Finder',
-    description:
-      'Find the right oil for your vehicle! Lubricants for cars, commercial vehicles, motorcycles, and industrial machines.',
-  },
-  {
-    href: '/solutions',
-    image:
-      'https://images.pexels.com/photos/185545/pexels-photo-185545.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    icon: Wrench,
-    title: 'Industrial & Automotive Solutions',
-    description: 'Lubricant and chemical solutions engineered for industrial and automotive applications.',
-  },
-];
-
-const NEWS_ITEMS: NewsItem[] = [
-  {
-    image:
-      'https://images.pexels.com/photos/10490610/pexels-photo-10490610.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    icon: Wrench,
-    category: 'Product',
-    title: 'New engine oil range now available across Pakistan.',
-  },
-  {
-    image:
-      'https://images.pexels.com/photos/10490621/pexels-photo-10490621.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    icon: Droplet,
-    category: 'Service',
-    title: 'Lubrezool partners with local workshops for oil-change service.',
-  },
-  {
-    image:
-      'https://images.pexels.com/photos/10490623/pexels-photo-10490623.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    icon: Newspaper,
-    category: 'News',
-    title: 'Lubrezool expands quality testing lab for 2026.',
-  },
-];
+const ICONS: Record<ContentIcon, LucideIcon> = {
+  droplet: Droplet,
+  wrench: Wrench,
+  newspaper: Newspaper,
+  search: Search,
+};
 
 const containerVariants: Variants = {
   hidden: {},
@@ -73,7 +23,13 @@ const itemVariants: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
 };
 
-export default function Highlights() {
+export default function Highlights({
+  quickLinks,
+  newsItems,
+}: {
+  quickLinks: QuickLink[];
+  newsItems: NewsItem[];
+}) {
   return (
     <section
       className="relative py-20 sm:py-28"
@@ -92,8 +48,8 @@ export default function Highlights() {
       >
         {/* Quick links row */}
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          {QUICK_LINKS.map((link) => {
-            const Icon = link.icon;
+          {quickLinks.map((link) => {
+            const Icon = ICONS[link.icon] ?? Droplet;
             return (
               <motion.div key={link.title} variants={itemVariants}>
                 <Link
@@ -148,8 +104,8 @@ export default function Highlights() {
         </motion.h2>
 
         <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
-          {NEWS_ITEMS.map((item) => {
-            const Icon = item.icon;
+          {newsItems.map((item) => {
+            const Icon = ICONS[item.icon] ?? Newspaper;
             return (
               <motion.article
                 key={item.title}
